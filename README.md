@@ -1,181 +1,298 @@
-🧪 💼 TESTE TÉCNICO — Spring Boot + Herança JPA
-🕒 Prazo
+# 🧪 Desafio Completo — Spring Boot (Herança + Strategy + Factory + Arquitetura Desacoplada)
 
-👉 2 dias (48 horas)
-Se quiser simular mais pressão: 1 dia (24h)
+---
 
-🎯 Objetivo
+## 🎯 Objetivo
 
-Construir uma API REST usando Spring Boot que implemente herança com:
+Construir uma API REST completa que demonstre:
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+* Herança com JPA (`SINGLE_TABLE`)
+* Polimorfismo real
+* Strategy Pattern (comportamento)
+* Factory Pattern (criação de objetos)
+* Arquitetura desacoplada
 
-E demonstre claramente:
+---
 
-Uso correto de herança
-Persistência no banco
-Estrutura da tabela
-Polimorfismo funcionando
-📦 Escopo do Projeto
-🧾 Domínio: Sistema de Pagamentos
+## 🕒 Prazo
 
-Você deve implementar:
+* Base obrigatória: **48h**
+* Completo (nível avançado): **72h**
 
-🔹 Classe abstrata
-Pagamento
-🔹 Subclasses obrigatórias
-CartaoCredito
-Boleto
-Pix
-🧱 Requisitos Técnicos
-✅ 1. Entidades (OBRIGATÓRIO)
+---
 
-Usar:
+# 📦 Cenário
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+Sistema de **Pagamentos**, onde cada tipo possui:
 
-Usar:
+* Estrutura própria (dados)
+* Comportamento próprio (processamento)
 
-@DiscriminatorColumn
-Cada classe filha deve ter @DiscriminatorValue
-✅ 2. Banco de dados
+---
 
-Pode usar:
+# 🧱 ETAPA 1 — MODELAGEM (HERANÇA)
 
-H2 (mais rápido)
-ou PostgreSQL (melhor ainda 💪)
-✅ 3. API REST
-📌 Endpoints obrigatórios:
-➤ Criar pagamentos
-POST /pagamentos/cartao
-POST /pagamentos/boleto
-POST /pagamentos/pix
-➤ Listar todos
-GET /pagamentos
+## Você deve:
 
-👉 Deve retornar lista com tipos diferentes corretamente
+* Criar uma classe base **abstrata**
+* Configurar herança com `SINGLE_TABLE`
+* Definir coluna discriminadora
 
-➤ Buscar por ID
-GET /pagamentos/{id}
-✅ 4. JSON de entrada (exemplo)
-Cartão:
-{
-  "valor": 150.0,
-  "numeroCartao": "1234",
-  "nomeTitular": "Joao"
-}
-Pix:
-{
-  "valor": 200.0,
-  "chavePix": "email@teste.com"
-}
-🔥 Requisito IMPORTANTE (o que diferencia quem sabe 👀)
-✅ 5. Mostrar como fica no banco
+Criar subclasses:
 
-Você DEVE entregar:
+* Cartão de crédito
+* Pix
+* Boleto
 
-👉 Print OU descrição da tabela gerada
+Cada uma deve possuir atributos próprios
 
-Exemplo esperado:
+---
 
-id	valor	tipo_pagamento	numero_cartao	chave_pix
-✅ 6. Demonstrar polimorfismo
+## ✅ Resultado esperado:
 
-No GET /pagamentos, deve retornar algo como:
+* Apenas **uma tabela no banco**
+* Coluna que identifica o tipo
+* Colunas específicas por tipo (com valores nulos quando não aplicável)
 
-[
-  {
-    "id": 1,
-    "valor": 100,
-    "numeroCartao": "1234"
-  },
-  {
-    "id": 2,
-    "valor": 200,
-    "chavePix": "abc@pix"
-  }
-]
+---
 
-👉 Ou seja: cada tipo com seus campos
+# 🌐 ETAPA 2 — API REST
 
-💥 EXTRA (DIFERENCIAL FORTE)
+## Você deve implementar:
 
-Se quiser subir MUITO o nível:
+* Criação de pagamentos (endpoint único)
+* Listagem de todos os pagamentos
+* Busca por ID
 
-⭐ Endpoint único
-POST /pagamentos
+---
 
-Com:
+## ✅ Resultado esperado:
 
-{
-  "tipo": "PIX",
-  "valor": 100,
-  "chavePix": "teste@email.com"
-}
+* API funcional
+* Dados persistidos corretamente
+* Retorno com polimorfismo
 
-👉 Você decide qual classe instanciar
+---
 
-⭐ Tratamento de erro
-Tipo inválido
-Campos obrigatórios faltando
-⭐ Teste unitário (muito valorizado)
-Testar criação de cada tipo
-Testar persistência
-📁 Entregáveis
+# 🔁 ETAPA 3 — POLIMORFISMO
 
-Você deve entregar:
+## Você deve:
 
-✅ Código fonte
-Projeto Spring Boot completo
-Pode ser zip ou GitHub
-✅ README.md contendo:
+* Buscar dados usando a classe base
+* Retornar diretamente os resultados
 
-Explique:
+---
 
-Como rodar o projeto
-Qual banco usou
-Como testar endpoints
-Explicação rápida de:
-SINGLE_TABLE
-Como ficou a tabela
-✅ Evidência do banco
-Print da tabela
-OU
-Script SQL gerado
-🧠 Critérios de Avaliação
-Critério	Peso
-Uso correto de herança	⭐⭐⭐⭐⭐
-Estrutura da tabela	⭐⭐⭐⭐⭐
-Clareza do código	⭐⭐⭐⭐
-API funcionando	⭐⭐⭐⭐
-Polimorfismo correto	⭐⭐⭐⭐⭐
-Extras (endpoint único/teste)	⭐⭐⭐⭐⭐
-⚠️ Erros que eliminam candidato
+## 🚨 Regras:
 
-❌ Não usar SINGLE_TABLE
-❌ Criar tabelas separadas
-❌ Não usar @Discriminator
-❌ Retornar tudo como objeto genérico sem polimorfismo
-❌ Código sem rodar
+* NÃO usar `instanceof`
+* NÃO usar `if` baseado em tipo
+* NÃO usar `switch`
 
-🧩 Dicas (nível entrevista)
-Use abstract class na base
-Use @JsonTypeInfo se tiver problema no retorno JSON
-Observe os campos NULL no banco
-Teste no Postman ou Insomnia
-🚀 Missão
+---
 
-Se você fizer isso direito, você vai entender:
+## ✅ Resultado esperado:
 
-Herança no JPA (de verdade)
-Como ORM funciona por baixo
-Como banco e Java se conectam
-💬 Quando terminar
+* Lista com objetos de tipos diferentes
+* Cada objeto com seus próprios campos
+* Sistema identifica automaticamente o tipo
 
-Me manda:
+---
 
-Código
-Ou prints
-Ou dúvidas
+# 🧱 ETAPA 4 — ARQUITETURA DESACOPLADA
 
-Que eu corrijo como se fosse um avaliador técnico 👀🔥
+## Você deve separar:
+
+* Controller → entrada/saída
+* Service → regras de negócio
+* Repository → acesso ao banco
+* DTO → entrada/saída da API
+
+---
+
+## ✅ Resultado esperado:
+
+* Código organizado
+* Baixo acoplamento
+* Responsabilidades bem definidas
+
+---
+
+# 🏭 ETAPA 5 — FACTORY PATTERN (CRIAÇÃO)
+
+## Você deve:
+
+* Criar uma estrutura responsável por instanciar os tipos de pagamento
+* Receber dados genéricos (com tipo)
+* Retornar o objeto correto
+
+---
+
+## 🚨 Regras:
+
+* Controller NÃO pode instanciar objetos diretamente
+* Service NÃO deve conter lógica de criação
+
+---
+
+## ✅ Resultado esperado:
+
+* Criação centralizada
+* Fácil adição de novos tipos
+* Código limpo e extensível
+
+---
+
+# ⚙️ ETAPA 6 — STRATEGY PATTERN (COMPORTAMENTO)
+
+## Você deve:
+
+* Criar uma estrutura para processar pagamentos
+* Cada tipo deve ter seu próprio comportamento
+
+---
+
+## Você deve implementar:
+
+* Interface de comportamento
+* Implementações separadas por tipo
+
+---
+
+## 🚨 Regras:
+
+* NÃO usar `if` ou `switch` para decidir comportamento
+* NÃO usar `instanceof`
+
+---
+
+## ✅ Resultado esperado:
+
+* Cada tipo processa de forma diferente
+* Sistema escolhe automaticamente o comportamento correto
+* Código aberto para extensão
+
+---
+
+# 🔗 ETAPA 7 — INTEGRAÇÃO (FLUXO COMPLETO)
+
+## Fluxo esperado:
+
+1. Receber requisição com tipo de pagamento
+2. Factory cria o objeto correto
+3. Objeto é salvo no banco
+4. Sistema recupera o objeto
+5. Strategy correta é aplicada automaticamente
+6. Resultado é retornado
+
+---
+
+## ✅ Resultado esperado:
+
+* Fluxo completo funcionando
+* Sem lógica condicional baseada em tipo
+* Total desacoplamento
+
+---
+
+# 🛑 ETAPA 8 — VALIDAÇÃO E ERROS
+
+## Você deve:
+
+* Validar dados de entrada
+* Tratar:
+
+  * Tipo inválido
+  * Campos obrigatórios
+  * ID inexistente
+
+---
+
+## ✅ Resultado esperado:
+
+* API robusta
+* Erros controlados
+* Mensagens claras
+
+---
+
+# 📁 ENTREGÁVEIS
+
+## ✅ Código
+
+* Projeto completo e funcional
+* Estrutura organizada
+
+---
+
+## ✅ README
+
+Explicando:
+
+* Como rodar o projeto
+* Como testar endpoints
+* Estrutura da aplicação
+* Decisões de arquitetura
+* Explicação de:
+
+  * Herança (SINGLE_TABLE)
+  * Polimorfismo
+  * Strategy Pattern
+  * Factory Pattern
+
+---
+
+## ✅ Evidência do banco
+
+* Print da tabela
+  OU
+* Script SQL
+
+---
+
+# 🧠 CRITÉRIOS DE AVALIAÇÃO
+
+* Modelagem correta de herança
+* Uso correto de polimorfismo
+* Ausência de lógica condicional baseada em tipo
+* Aplicação de Strategy Pattern
+* Aplicação de Factory Pattern
+* Arquitetura desacoplada
+* Clareza e organização do código
+
+---
+
+# ⚠️ ERROS QUE ELIMINAM
+
+* Uso de `instanceof`
+* Uso de `if` para decidir tipo
+* Lógica de criação espalhada
+* Lógica de comportamento acoplada
+* Retornar entidades diretamente
+* Código sem separação de camadas
+
+---
+
+# 🚀 RESULTADO FINAL ESPERADO
+
+O sistema deve:
+
+* Persistir diferentes tipos em uma única tabela
+* Retornar dados polimórficos corretamente
+* Criar objetos de forma centralizada
+* Processar comportamentos sem condicionais
+* Estar preparado para expansão sem alteração de código existente
+
+---
+
+# 💬 OBJETIVO FINAL
+
+Ao concluir este desafio, você deve dominar:
+
+* Herança no JPA (nível real)
+* Polimorfismo aplicado
+* Strategy Pattern na prática
+* Factory Pattern na prática
+* Arquitetura desacoplada (nível profissional)
+
+---
